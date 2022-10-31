@@ -48,13 +48,11 @@ class TestApplicationTests {
     @Test
     public void testGetUserDetailsStringParam() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/userdetails/as").accept(
+                "/api/userdetails/as").accept(
                 MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder)
                 .andExpect(jsonPath("$.status",
-                        is("BAD_REQUEST")))
-                .andExpect(jsonPath("$.message",
-                        is("The ID must be a Number")));
+                        is("BAD_REQUEST")));
 
     }
 
@@ -76,16 +74,13 @@ class TestApplicationTests {
                 .build();
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(
-                        "/userdetails/as")
+                        "/api/userdetails/as")
                 .content(this.objectMapper.writeValueAsString(userUpdate))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder)
-                .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status",
-                        is("BAD_REQUEST")))
-                .andExpect(jsonPath("$.message",
-                        is("The ID must be a Number")));
+                        is("BAD_REQUEST")));
 
     }
 
@@ -106,7 +101,7 @@ class TestApplicationTests {
                 .build();
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(
-                        "/userdetails/1")
+                        "/api/userdetails/1")
                 .content(this.objectMapper.writeValueAsString(userUpdate))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -136,7 +131,7 @@ class TestApplicationTests {
                 .build();
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(
-                        "/userdetails/1")
+                        "/api/userdetails/1")
                 .content(this.objectMapper.writeValueAsString(userUpdate))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -167,7 +162,7 @@ class TestApplicationTests {
                 .build();
         Mockito.when(userController.getUserDetails(1)).thenReturn(new ResponseEntity<>(userUpdate, HttpStatus.OK));
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/userdetails/1");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/userdetails/1");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
@@ -181,7 +176,7 @@ class TestApplicationTests {
     @Test
     public void testGetUserDetailsNotFound() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/userdetails/20").accept(
+                "/api/userdetails/20").accept(
                 MediaType.APPLICATION_JSON);
 
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,"User has not been found with id 20");
@@ -212,7 +207,7 @@ class TestApplicationTests {
                 .address(address)
                 .build();
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(
-                "/userdetails/20")
+                "/api/userdetails/20")
                 .content(this.objectMapper.writeValueAsString(userUpdate))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
